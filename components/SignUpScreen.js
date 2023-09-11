@@ -3,7 +3,8 @@ import { View, StyleSheet, Text, TouchableOpacity, Image, TextInput, ScrollView 
 import { auth } from './fbConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-import { genPassword } from "../services/serviceAuth";
+import { genPassword, signUp } from "../services/serviceAuth";
+
 
 import topImgBG from "../assets/listen.png";
 // import  from "../assets/bg.png";
@@ -32,14 +33,19 @@ export default function SignUpScreen({ navigation }) {
     // const [passwordGen, setPasswordGen] = useState(false);
 
 
+
     function onSignUp() {
         // console.log(emailAddress, password);
-        createUserWithEmailAndPassword(auth, emailAddress, password).then(() => {
-            // console.log("sign up sccessfully");
-            // navigation.navigate("Journals");        
-        }).catch((error) => {
-            console.log(error.message);
-        })
+        // createUserWithEmailAndPassword(auth, emailAddress, password).then(() => {
+        //     // console.log("sign up sccessfully");
+        //     // navigation.navigate("Journals");        
+        // }).catch((error) => {
+        //     console.log(error.message);
+        // })
+
+        const user = signUp(emailAddress, password);
+        const res = user.json();
+        console.log("My User", res);
     }
 
     //Validation
@@ -201,7 +207,7 @@ export default function SignUpScreen({ navigation }) {
                                         autoCapitalize="none"
                                         onChangeText={text => setPassword(text)}
                                         value={password} placeholder={passwordStatus} /> */}
-                                    <Text style={{marginTop: 15,marginLeft: 5}}>{passwordStatus}</Text>
+                                    <Text style={{ marginTop: 15, marginLeft: 5 }}>{passwordStatus}</Text>
                                 </View>
 
                                 {/* <TouchableOpacity style={styles.pswEye} onPress={handlePasswordVis}>

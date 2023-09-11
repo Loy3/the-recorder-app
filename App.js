@@ -60,8 +60,8 @@ export default function App({ navigation }) {
           :
           (
             <>
-              <Stack.Screen name="Landing" component={LandingScreen} />
-              <Stack.Screen name="SignIn" component={SignInScreen} />
+              {/* <Stack.Screen name="Landing" component={LandingScreen} /> */}
+              {/* <Stack.Screen name="SignIn" component={SignInScreen} /> */}
               <Stack.Screen name="SignUp" component={SignUpScreen} />
             </>
           )
