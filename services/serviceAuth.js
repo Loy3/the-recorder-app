@@ -14,14 +14,55 @@ export const signUp = async (email, password) => {
         email: email,
         password: password
     }
-    fetch(url, {
-        method: "POST",
-        headers: { 'ContentType': 'application/json' },
-        body: JSON.stringify(user),
-    }).then(response => response.json()).then((dat) => {
-        console.log("Done: ", dat);
-        return dat
-    }).catch((error) => {
+    // var data = null;
+    // fetch(url, {
+    //     method: "POST",
+    //     headers: { 'ContentType': 'application/json' },
+    //     body: JSON.stringify(user),
+    // }).then(response => response.json()).then((dat) => {
+    //     data = dat;
+    //     console.log("Data", data);
+    //     console.log("Done: ", dat);
+    //     // return ;
+    // }).catch((error) => {
+    //     console.log(error);
+    //     // return error;
+    // })
+    // console.log("the return data", data);
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { 'ContentType': 'application/json' },
+            body: JSON.stringify(user),
+        });
+        const data = await response.json();
+        // console.log("Done: ", data);
+        return data;
+    } catch (error) {
         console.log(error);
-    })
+    }
+}
+
+
+
+export const signIn = async (email, password) => {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`
+
+    const user = {
+        email: email,
+        password: password
+    }
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { 'ContentType': 'application/json' },
+            body: JSON.stringify(user),
+        });
+        const data = await response.json();
+        // console.log("Done: ", data);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
 }

@@ -4,7 +4,7 @@ import { auth } from './fbConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { genPassword, signUp } from "../services/serviceAuth";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import topImgBG from "../assets/listen.png";
 // import  from "../assets/bg.png";
@@ -34,7 +34,7 @@ export default function SignUpScreen({ navigation }) {
 
 
 
-    function onSignUp() {
+    async function onSignUp() {
         // console.log(emailAddress, password);
         // createUserWithEmailAndPassword(auth, emailAddress, password).then(() => {
         //     // console.log("sign up sccessfully");
@@ -43,9 +43,14 @@ export default function SignUpScreen({ navigation }) {
         //     console.log(error.message);
         // })
 
-        const user = signUp(emailAddress, password);
-        const res = user.json();
-        console.log("My User", res);
+        const user = await signUp(emailAddress, password);
+        const res = await user;
+        // console.log("My User", res);
+
+        const jsonValue = JSON.stringify(res);
+        await AsyncStorage.setItem('user', jsonValue).then(() => {
+            console.log("Success");
+        })
     }
 
     //Validation
@@ -164,6 +169,7 @@ export default function SignUpScreen({ navigation }) {
         setBtnPsStatus(true);
     }
     //Validation
+
 
     return (
         <View style={styles.container}>

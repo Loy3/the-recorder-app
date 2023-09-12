@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useState, useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LandingScreen from './components/LandingScreen';
 import HomeScreen from "./components/HomeScreen";
@@ -24,11 +25,49 @@ export default function App({ navigation }) {
   const [status, setstatus] = useState("");
   // let status = null;
   useEffect(() => {
-    const checkAuth = (auth);
+    // const checkAuth = (auth);
     // console.log(auth);
-    const unsubscribe = checkAuth.onAuthStateChanged((user) => {
+    // const unsubscribe = checkAuth.onAuthStateChanged((user) => {
+    //   if (user !== null) {
+    //     // console.log(user)
+    //     setUserMail(user.email)
+    //     setstatus("Signed In");
+    //     if (user.email) {
+    //       setSignIn(true);
+    //       // console.log("Hello");
+
+    //     }
+    //   } else {
+    //     setstatus("Not Signed In");
+    //     // console.log("Not Signed In");
+    //     setSignIn(false);
+    //   }
+    // });
+    // return () => unsubscribe();
+
+    //  const unsubscribe = getUser((user) => {
+    //   if (user !== null) {
+    //     console.log("user",user)
+    //     // setUserMail(user.email)
+    //     // setstatus("Signed In");
+    //     // if (user.email) {
+    //     //   setSignIn(true);
+    //     //   // console.log("Hello");
+
+    //     // }
+    //   } else {
+    //     setstatus("Not Signed In");
+    //     // console.log("Not Signed In");
+    //     setSignIn(false);
+    //   }
+    // });
+    // return () => unsubscribe();
+
+    (async () => {
+      const user = await getUser();
+      // console.log("done");
       if (user !== null) {
-        // console.log(user)
+        // console.log("user",user.email)
         setUserMail(user.email)
         setstatus("Signed In");
         if (user.email) {
@@ -41,9 +80,23 @@ export default function App({ navigation }) {
         // console.log("Not Signed In");
         setSignIn(false);
       }
-    });
-    return () => unsubscribe();
+
+    })();
   }, []);
+
+  async function getUser() {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      // const jsonValue = await AsyncStorage.removeItem('user');
+      
+      // const user = JSON.parse(jsonValue);
+      // console.log("RTN User", JSON.parse(jsonValue));
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+      // return null;
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
 
   return (
     <NavigationContainer>
@@ -61,7 +114,7 @@ export default function App({ navigation }) {
           (
             <>
               {/* <Stack.Screen name="Landing" component={LandingScreen} /> */}
-              {/* <Stack.Screen name="SignIn" component={SignInScreen} /> */}
+              <Stack.Screen name="SignIn" component={SignInScreen} />
               <Stack.Screen name="SignUp" component={SignUpScreen} />
             </>
           )

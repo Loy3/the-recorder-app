@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { signIn } from "../services/serviceAuth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from './fbConfig';
 import topImgBG from "../assets/listen.png";
@@ -17,24 +19,35 @@ export default function SignInScreen({ navigation }) {
     const [warningMsg, setWarningMsg] = useState("")
     const [warningStatus, setWarningStatus] = useState(false)
 
-    function onSignin() {
+   async function onSignin() {
         // console.log(emailAddress, password);
 
-        if (emailAddress !== "" && password !== "") {
+        // if (emailAddress !== "" && password !== "") {
 
-            signInWithEmailAndPassword(auth, emailAddress, password).then(() => {
-                // navigation.navigate("Journals");
-                // console.log("signed");
-            }).catch((error) => {
-                console.log(error.message);
-                setWarningStatus(true);
-                setWarningMsg("Incorrect Email or Password");
-            })
-        } else {
-            // alert
-            setWarningStatus(true);
-            setWarningMsg("Require both email address and password.");
-        }
+        //     signInWithEmailAndPassword(auth, emailAddress, password).then(() => {
+        //         // navigation.navigate("Journals");
+        //         // console.log("signed");
+        //     }).catch((error) => {
+        //         console.log(error.message);
+        //         setWarningStatus(true);
+        //         setWarningMsg("Incorrect Email or Password");
+        //     })
+        // } else {
+        //     // alert
+        //     setWarningStatus(true);
+        //     setWarningMsg("Require both email address and password.");
+        // }3
+
+        const user = await signIn(emailAddress, password);
+        const res = await user;
+        // console.log("My User", res);
+
+        const jsonValue = JSON.stringify(res);
+        await AsyncStorage.setItem('user', jsonValue).then(() => {
+            console.log("Success");
+        })
+
+
     }
 
     function handlePassword() {
@@ -72,7 +85,7 @@ export default function SignInScreen({ navigation }) {
                                     <TextInput style={styles.formInput}
                                         autoComplete="off"
                                         keyboardType="email-address"
-                                        autoCapitalize="none" 
+                                        autoCapitalize="none"
                                         onChangeText={text => setEmailAddress(text)}
                                         value={emailAddress} placeholder={"Email Address"} />
                                 </View>
@@ -85,7 +98,7 @@ export default function SignInScreen({ navigation }) {
                                     <TextInput style={styles.formInput}
                                         secureTextEntry={passwordVis}
                                         autoComplete="off"
-                                        autoCapitalize="none" 
+                                        autoCapitalize="none"
                                         onChangeText={text => setPassword(text)}
                                         value={password} placeholder={"Password"} />
                                 </View>
@@ -110,7 +123,7 @@ export default function SignInScreen({ navigation }) {
                                     <Text style={styles.signUpTxt}>Sign Up</Text>
                                 </TouchableOpacity>
                             </View>
-                            
+
                         </View>
                     </View>
                 </ScrollView>
