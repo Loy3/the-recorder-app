@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, ScrollView 
 import { Audio } from "expo-av";
 // import { AudioRecorderPlayer, AudioPlayer } from 'react-native-audio-recorder-player';
 import React, { useState, useEffect, useRef } from 'react';
+import { getJournals } from "../services/serviceStore";
 
 import stopAud from "../assets/stop2.png";
 import playAud from "../assets/play2.png";
@@ -42,17 +43,39 @@ export default function JournalsScreen({ navigation, route }) {
 
     const fetchData = (async () => {
 
-        const collectionRef = collection(db, 'journals');
-        const queryRef = query(collectionRef, where("email", '==', email));
-        onSnapshot(queryRef, (snapshot) => {
-            const fetchedDocuments = [];
-            snapshot.forEach((doc) => {
-                fetchedDocuments.push({ id: doc.id, ...doc.data() });
-            });
-            setJournals(fetchedDocuments);
+        // const collectionRef = collection(db, 'journals');
+        // const queryRef = query(collectionRef, where("email", '==', email));
+        // onSnapshot(queryRef, (snapshot) => {
+        //     const fetchedDocuments = [];
+        //     snapshot.forEach((doc) => {
+        //         fetchedDocuments.push({ id: doc.id, ...doc.data() });
+        //     });
+        //     setJournals(fetchedDocuments);
 
+        // });
+
+
+        const journ = await getJournals(email);;
+        const res = await journ;
+
+        let journalsToDisplay = [];
+        res.forEach(r => {
+            const store = {
+                // email: r.email.stringValue,
+
+                title: r.title.stringValue,
+                audioName: r.audioName.stringValue,
+                audioUrl: r.audioUrl.stringValue,
+                date: r.date.stringValue,
+                email: r.email.stringValue,
+
+            }
+
+            journalsToDisplay.push(store);
         });
 
+        console.log("res", journalsToDisplay);
+        setJournals(journalsToDisplay)
     })
 
     useEffect(() => {

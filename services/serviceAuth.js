@@ -44,8 +44,6 @@ export const signUp = async (email, password) => {
     }
 }
 
-
-
 export const signIn = async (email, password) => {
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`
 

@@ -88,7 +88,7 @@ export default function App({ navigation }) {
     try {
       const jsonValue = await AsyncStorage.getItem('user');
       // const jsonValue = await AsyncStorage.removeItem('user');
-      
+
       // const user = JSON.parse(jsonValue);
       // console.log("RTN User", JSON.parse(jsonValue));
       return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -113,7 +113,7 @@ export default function App({ navigation }) {
           :
           (
             <>
-              {/* <Stack.Screen name="Landing" component={LandingScreen} /> */}
+              <Stack.Screen name="Landing" component={LandingScreen} />
               <Stack.Screen name="SignIn" component={SignInScreen} />
               <Stack.Screen name="SignUp" component={SignUpScreen} />
             </>

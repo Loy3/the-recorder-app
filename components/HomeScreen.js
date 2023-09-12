@@ -147,7 +147,6 @@ export default function HomeScreen({ navigation, route }) {
 
 
     async function storeJournal() {
-
         try {
             setIsLoading(true);
             const recordUri = recordings[0].file;
@@ -197,7 +196,8 @@ export default function HomeScreen({ navigation, route }) {
                         }).then(async () => {
                             setRecordings([]);
                             setIsLoading(false);
-                            navigation.navigate("Journals")
+                            navigation.navigate("Journals");
+                            
                         })
                 });
             } else {
@@ -209,7 +209,7 @@ export default function HomeScreen({ navigation, route }) {
             console.log("line 287", error)
         }
         setRecordings([])
-        console.log(isCounting);
+        // console.log(isCounting);
     }
 
     //Sign out
