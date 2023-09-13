@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, ScrollView 
 import { Audio } from "expo-av";
 // import { AudioRecorderPlayer, AudioPlayer } from 'react-native-audio-recorder-player';
 import React, { useState, useEffect, useRef } from 'react';
-import { getJournals } from "../services/serviceStore";
+import { getJournals, deleteMyJournal, updateMyJournal } from "../services/serviceStore";
 
 import stopAud from "../assets/stop2.png";
 import playAud from "../assets/play2.png";
@@ -57,11 +57,11 @@ export default function JournalsScreen({ navigation, route }) {
 
         const journ = await getJournals(email);;
         const res = await journ;
-
+        // console.log("Results", res);
         let journalsToDisplay = [];
         res.forEach(r => {
             const store = {
-                // email: r.email.stringValue,
+                id: r.id,
 
                 title: r.title.stringValue,
                 audioName: r.audioName.stringValue,
@@ -74,7 +74,7 @@ export default function JournalsScreen({ navigation, route }) {
             journalsToDisplay.push(store);
         });
 
-        console.log("res", journalsToDisplay);
+        // console.log("res", journalsToDisplay);
         setJournals(journalsToDisplay)
     })
 
@@ -105,13 +105,16 @@ export default function JournalsScreen({ navigation, route }) {
 
 
     //Delete
-    async function deleteRoom(event, data) {
+    async function deleteJournal(event, data, index) {
         // console.log(data.audioName);
         try {
-
+            // let existingJournals = [...journals].filter(res => res.id !== data.id);
+            // console.log("existingJournals", existingJournals);
             deleteAudio(data.audioName).then(async () => {
-                await deleteDoc(doc(db, "journals", data.id));
-                // console.log("Document successfully deleted!");
+                await deleteMyJournal(data.id)
+                console.log("Document successfully deleted!");
+                let existingJournals = [...journals].filter(res => res.id !== data.id);
+                setJournals(existingJournals);
                 setMenuStatus(false);
                 setMenuTitle("Title");
             }).catch((error) => {
@@ -146,21 +149,40 @@ export default function JournalsScreen({ navigation, route }) {
 
     async function journalToUpdate() {
         const docId = updateJournal.id
-        const updateData = {
-            title: newJournalName,
-            audioName: updateJournal.audioName,
-            audioUrl: updateJournal.audioUrl,
-            date: updateJournal.date
-        }
 
-        const storageRef = doc(db, "journals", docId);
+
+
+        // const updateData = {
+        //     title: newJournalName,
+        //     audioName: updateJournal.audioName,
+        //     audioUrl: updateJournal.audioUrl,
+        //     date: updateJournal.date
+        // }
+
+        // const storageRef = doc(db, "journals", docId);
 
         try {
-            await updateDoc(storageRef, updateData);
+            // await updateDoc(storageRef, updateData);
             // console.log('Updated');
-            setMenuStatus(false);
-            setMenuTitle("Title");
-            setupdateStatus(false);
+
+            let index = 0;
+
+            for (let i = 0; i < journals.length; i++) {
+                if (journals[i].title === updateJournal.title) {
+                    index = i;
+                }
+            }
+            let arr = journals;
+            arr[index].title = newJournalName;
+            // console.log(arr[index].title);
+            
+            await updateMyJournal(docId, newJournalName).then(() => {
+                setMenuStatus(false);
+                setMenuTitle("Title");
+                setupdateStatus(false);
+                setJournals(arr);
+            })
+
         } catch (error) {
             console.log('Failed to Update');
         }
@@ -256,7 +278,7 @@ export default function JournalsScreen({ navigation, route }) {
                                                 <Image source={audEdit} style={styles.audOpt} />
                                             </TouchableOpacity>
 
-                                            <TouchableOpacity onPress={(ev) => deleteRoom(ev, jrn)}>
+                                            <TouchableOpacity onPress={(ev) => deleteJournal(ev, jrn, index)}>
                                                 <Image source={audDelete} style={styles.audOpt} />
                                             </TouchableOpacity></View>
                                         : null}
