@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 import { Audio } from "expo-av";
 import React, { useState, useRef } from 'react';
+import { storeMyDoc } from "../services/serviceStore";
 
 
 import recordOn from "../assets/recorder.png";
@@ -183,13 +184,14 @@ export default function HomeScreen({ navigation, route }) {
                     getDownloadURL(storageRef)
                         .then(async (url) => {
                             // Save data to Firestore           
-                            await addDoc(collection(db, "journals"), {
+                            const data = {
                                 title: audioTitle,
                                 audioName: journal,
                                 audioUrl: url,
                                 date: formattedDate,
                                 email: email
-                            });
+                            }
+                            await storeMyDoc(data);
                         })
                         .catch((error) => {
                             console.error(error);
@@ -197,7 +199,7 @@ export default function HomeScreen({ navigation, route }) {
                             setRecordings([]);
                             setIsLoading(false);
                             navigation.navigate("Journals");
-                            
+
                         })
                 });
             } else {

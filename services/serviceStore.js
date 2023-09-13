@@ -1,5 +1,39 @@
 const projectId = "nft-collections-7f143";
 
+//Save Document
+export const storeMyDoc = async (data) => {
+    console.log("Data res", data);
+
+    const dataToUpdate = {
+        fields: {
+            title: { stringValue: data.title },
+            audioName: { stringValue: data.audioName },
+            audioUrl: { stringValue: data.audioUrl },
+            date: { stringValue: data.date },
+            email: { stringValue: data.email },
+        }
+    }
+
+    console.log("Json", JSON.stringify(dataToUpdate));
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/journals`;
+    try {
+        await fetch(url, {
+            method: "POST",
+            headers: { 'ContentType': 'application/json' },
+            body: JSON.stringify(dataToUpdate),
+        }).then(() => {
+            console.log("Done");
+        }).catch((error) => {
+            console.log(error);
+        })
+        // const data = await response.json();
+
+        // return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //Get Recordings
 export const getJournals = async (email) => {
     const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/journals`;
@@ -30,8 +64,8 @@ export const getJournals = async (email) => {
 
 //Delete Journal
 export const deleteMyJournal = async (id) => {
-    console.log("Hello here is my id: ", id);
-    const url = `https://firestore.googleapis.com/v1/projects/nft-collections-7f143/databases/(default)/documents/journals/${id}`;
+    // console.log("Hello here is my id: ", id);
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/journals/${id}`;
     fetch(url, {
         method: "DELETE",
     }).then(() => {
@@ -54,10 +88,10 @@ export const updateMyJournal = async (id, title) => {
         }
     }
     // console.log("Json", JSON.stringify(titleToUpdate));
-    const url = `https://firestore.googleapis.com/v1/projects/nft-collections-7f143/databases/(default)/documents/journals/${id}?currentDocument.exists=true&updateMask.fieldPaths=title&alt=json`;
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/journals/${id}?currentDocument.exists=true&updateMask.fieldPaths=title&alt=json`;
     try {
-         await fetch(url, {
-            method: "PUT",
+        await fetch(url, {
+            method: "PATCH",
             headers: { 'ContentType': 'application/json' },
             body: JSON.stringify(titleToUpdate),
         }).then(() => {
@@ -72,3 +106,4 @@ export const updateMyJournal = async (id, title) => {
         console.log(error);
     }
 }
+
