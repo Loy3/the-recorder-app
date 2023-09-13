@@ -82,7 +82,7 @@ export default function App({ navigation }) {
       }
 
     })();
-  }, []);
+  }, [getUser]);
 
   async function getUser() {
     try {
@@ -107,21 +107,28 @@ export default function App({ navigation }) {
           <>
             <Stack.Screen name="Home" component={HomeScreen} initialParams={{ userMail }} />
             <Stack.Screen name="Journals" component={JournalsScreen} initialParams={{ userMail }} />
-
+            <Stack.Screen name="SignOut" >
+              {() => <SignOutScreen setSignIn={setSignIn} />}
+            </Stack.Screen>
           </>
+
         )
           :
           (
             <>
               <Stack.Screen name="Landing" component={LandingScreen} />
-              <Stack.Screen name="SignIn" component={SignInScreen} />
-              <Stack.Screen name="SignUp" component={SignUpScreen} />
+              <Stack.Screen name="SignIn">
+                {() => <SignInScreen setSignIn={setSignIn} />}
+              </Stack.Screen>
+              <Stack.Screen name="SignUp">
+                {() => <SignUpScreen setSignIn={setSignIn} />}
+              </Stack.Screen>
             </>
           )
 
         }
         {/* <AppStack.Screen name="DefaultScreen" component={DefaultScreen} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="SignOut" component={SignOutScreen} initialParams={{ status }} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

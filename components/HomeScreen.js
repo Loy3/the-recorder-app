@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Image, Scr
 import { Audio } from "expo-av";
 import React, { useState, useRef } from 'react';
 import { storeMyDoc } from "../services/serviceStore";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import recordOn from "../assets/recorder.png";
 import recordOff from "../assets/recorderOff.png";
@@ -215,12 +215,16 @@ export default function HomeScreen({ navigation, route }) {
     }
 
     //Sign out
-    function signOutF() {
-        auth.signOut().then(() => {
+    async function signOutF() {
+        // auth.signOut().then(() => {
+        //     navigation.navigate("SignOut");
+        // }).catch((error) => {
+        //     console.log(error.message);
+        // });
+        await AsyncStorage.removeItem('user').then(()=>{
             navigation.navigate("SignOut");
-        }).catch((error) => {
-            console.log(error.message);
-        });
+        })
+             
 
     }
 

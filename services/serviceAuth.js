@@ -37,7 +37,7 @@ export const signUp = async (email, password) => {
             body: JSON.stringify(user),
         });
         const data = await response.json();
-        // console.log("Done: ", data);
+        console.log("Done: ", data);
         return data;
     } catch (error) {
         console.log(error);

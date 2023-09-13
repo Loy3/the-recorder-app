@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { genPassword, signUp } from "../services/serviceAuth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 import topImgBG from "../assets/listen.png";
 // import  from "../assets/bg.png";
@@ -13,7 +14,9 @@ import pswd from "../assets/padlock.png";
 import pswdhide from "../assets/hide.png";
 import pswdshow from "../assets/view.png";
 
-export default function SignUpScreen({ navigation }) {
+export default function SignUpScreen({ setSignIn }) {
+    
+    const navigation = useNavigation();
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
 
@@ -50,6 +53,7 @@ export default function SignUpScreen({ navigation }) {
         const jsonValue = JSON.stringify(res);
         await AsyncStorage.setItem('user', jsonValue).then(() => {
             console.log("Success");
+            setSignIn(true)
         })
     }
 

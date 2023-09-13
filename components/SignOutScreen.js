@@ -1,8 +1,16 @@
-// import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function SignOutScreen({ navigation }) {
+export default function SignOutScreen({ setSignIn }) {
+    const navigation = useNavigation();
+    // navigation, route,
+    // const status = route.params.status;
 
+    useEffect(() => {
+        // console.log("status", status);
+        setSignIn(false)
+    }, [])
     return (
         <View style={styles.container}>
             <View style={styles.boxCon}>

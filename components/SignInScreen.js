@@ -10,8 +10,11 @@ import email from "../assets/email.png";
 import pswd from "../assets/padlock.png";
 import pswdhide from "../assets/hide.png";
 import pswdshow from "../assets/view.png";
+import { useNavigation } from '@react-navigation/native';
 
-export default function SignInScreen({ navigation }) {
+export default function SignInScreen({ setSignIn }) {
+    const navigation = useNavigation();
+    
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
 
@@ -45,6 +48,7 @@ export default function SignInScreen({ navigation }) {
         const jsonValue = JSON.stringify(res);
         await AsyncStorage.setItem('user', jsonValue).then(() => {
             console.log("Success");
+            setSignIn(true)
         })
 
 

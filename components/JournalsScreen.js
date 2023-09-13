@@ -3,6 +3,7 @@ import { Audio } from "expo-av";
 // import { AudioRecorderPlayer, AudioPlayer } from 'react-native-audio-recorder-player';
 import React, { useState, useEffect, useRef } from 'react';
 import { getJournals, deleteMyJournal, updateMyJournal } from "../services/serviceStore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import stopAud from "../assets/stop2.png";
 import playAud from "../assets/play2.png";
@@ -226,12 +227,16 @@ export default function JournalsScreen({ navigation, route }) {
     }
 
     //Sign out
-    function signOutF() {
-        auth.signOut().then(() => {
+    async function signOutF() {
+        // auth.signOut().then(() => {
+        //     navigation.navigate("SignOut");
+        // }).catch((error) => {
+        //     console.log(error.message);
+        // });
+
+        await AsyncStorage.removeItem('user').then(()=>{
             navigation.navigate("SignOut");
-        }).catch((error) => {
-            console.log(error.message);
-        });
+        })
 
     }
 
