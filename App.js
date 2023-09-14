@@ -90,7 +90,7 @@ export default function App({ navigation }) {
       // const jsonValue = await AsyncStorage.removeItem('user');
 
       const user = JSON.parse(jsonValue);
-      console.log("RTN User", JSON.parse(jsonValue));
+      // console.log("RTN User", JSON.parse(jsonValue));
       if (user !== null) {
         const token = user.idToken;
 

@@ -50,8 +50,6 @@ export default function SignInScreen({ setSignIn }) {
             console.log("Success");
             setSignIn(true)
         })
-
-
     }
 
     function handlePassword() {
