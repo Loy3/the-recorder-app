@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { authUrl, refreshTkn } from "./services/serviceAuth";
+
 import LandingScreen from './components/LandingScreen';
 import HomeScreen from "./components/HomeScreen";
 import JournalsScreen from "./components/JournalsScreen";
@@ -65,7 +67,7 @@ export default function App({ navigation }) {
 
     (async () => {
       const user = await getUser();
-      // console.log("done", user);
+      // console.log("The user", user);
       if (user !== null) {
         // console.log("user",user.email)
         setUserMail(user.email)
@@ -93,17 +95,18 @@ export default function App({ navigation }) {
       // console.log("RTN User", JSON.parse(jsonValue));
       if (user !== null) {
         const token = user.idToken;
-
+        const refTkn = user.refreshToken;
         // console.log(user.expiresIn);
         checkTokenExp(token, user.expiresIn).then(async (isValid) => {
           if (isValid) {
             // console.log("My brother we are moving");
             // setSignIn(true);
+            
             return jsonValue != null ? JSON.parse(jsonValue) : null;
           } else {
             console.log("Token invalid");
-            // await AsyncStorage.removeItem('user');
-            // setSignIn(false);
+            await refreshTkn(refTkn);
+            //refresh token here
             return null;
           }
         }).catch((error) => {
@@ -119,8 +122,8 @@ export default function App({ navigation }) {
   }
 
   async function checkTokenExp(token, expiresIn) {
-    const api_key = "";
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBZP4kNQQ3P64kJDMZit_blizapfoBzLas`;
+    // const url = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBZP4kNQQ3P64kJDMZit_blizapfoBzLas`;
+    const url = authUrl;
     const idToken = token;
     const response = await fetch(url, {
       method: "POST",
@@ -130,12 +133,12 @@ export default function App({ navigation }) {
     if (response.ok) {
       const data = await response.json();
       const user = data.users[0];
-      console.log("===", user, data);
+      // console.log("===", user, data);
       if (user) {
-        // console.log("the user", user);
-        const expTime = user.validSince + expiresIn;
+        // console.log("the user", expiresIn);
+        let expTime = user.validSince + expiresIn;;
         const now = Math.floor(Date.now() / 1000);
-        console.log("exp", expTime, "now", now);
+        // console.log("exp", expTime, "now", now);
         if (expTime > now) {
           console.log("Still Valid");
           return true

@@ -1,4 +1,7 @@
 const api_key = "AIzaSyBZP4kNQQ3P64kJDMZit_blizapfoBzLas";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${api_key}`
 
 //Password Generater
 export const genPassword = async () => {
@@ -49,7 +52,8 @@ export const signIn = async (email, password) => {
 
     const user = {
         email: email,
-        password: password
+        password: password,
+        returnSecureToken: true
     }
     try {
         const response = await fetch(url, {
@@ -58,7 +62,42 @@ export const signIn = async (email, password) => {
             body: JSON.stringify(user),
         });
         const data = await response.json();
+        console.log("Done: ", data);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+//Refresh token
+export const refreshTkn = async (rTkn) => {
+    const url = `https://securetoken.googleapis.com/v1/token?key=${api_key}`;
+
+    const refTok = {
+        grant_type: "refresh_token",
+        refresh_token: rTkn
+    }
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { 'ContentType': 'application/json' },
+            body: JSON.stringify(refTok),
+        });
+        const data = await response.json();
         // console.log("Done: ", data);
+        const jsonValue = await AsyncStorage.getItem('user');
+        // const jsonValue = await AsyncStorage.removeItem('user');
+
+        const user = JSON.parse(jsonValue);
+        var newUser = user;
+        newUser.idToken = data.id_token;
+
+        const newUserJsonValue = JSON.stringify(newUser);
+        await AsyncStorage.setItem('user', newUserJsonValue).then(() => {
+            console.log("Success");
+        })
         return data;
     } catch (error) {
         console.log(error);
