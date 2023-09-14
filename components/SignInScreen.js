@@ -68,7 +68,7 @@ export default function SignInScreen({ setSignIn }) {
                                 <View style={styles.email}>
                                     <TextInput style={styles.formInput}
                                         autoComplete="off"
-                                        keyboardType="email-address"
+                                        keyboardType="visible-password"
                                         autoCapitalize="none"
                                         onChangeText={text => setEmailAddress(text)}
                                         value={emailAddress} placeholder={"Email Address"} />

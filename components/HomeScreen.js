@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 import { Audio } from "expo-av";
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { storeMyDoc } from "../services/serviceStore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -44,9 +44,9 @@ const recordingSettings = {
 export default function HomeScreen({ navigation, route }) {
     const email = route.params.userMail;
 
-    // useEffect(() => {
-    //     console.log(email);
-    // }, [])
+    useEffect(() => {
+        console.log(email);
+    }, [])
     const [recording, setRecording] = useState();
     const [recordings, setRecordings] = useState([]);
     const [message, setMessage] = useState("");

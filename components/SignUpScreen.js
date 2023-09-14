@@ -35,19 +35,27 @@ export default function SignUpScreen({ setSignIn }) {
     const [passwordStatus, setPasswordStatus] = useState("Password: ");
     const [passwordGen, setPasswordGen] = useState(false);
 
+    const [errorMSG, seterrorMSG] = useState("");
+
     const [psChoiceEnt, setPsChoiceEnt] = useState(false);
     const [psChoiceGen, setPsChoiceGen] = useState(false);
 
     async function onSignUp() {
         const user = await signUp(emailAddress, password);
         const res = await user;
-        // console.log("My User", res);
-
-        const jsonValue = JSON.stringify(res);
-        await AsyncStorage.setItem('user', jsonValue).then(() => {
-            console.log("Success");
-            setSignIn(true)
-        })
+        console.log("My User", res);
+        let message = "";
+        if (!user.error) {
+            const jsonValue = JSON.stringify(res);
+            await AsyncStorage.setItem('user', jsonValue).then(() => {
+                console.log("Success");
+                setSignIn(true)
+                message = "";
+            })
+        } else {
+            message ="Invalid email, please try retyping it.";
+        }
+        seterrorMSG(message);
     }
 
     //Validation
@@ -191,8 +199,9 @@ export default function SignUpScreen({ setSignIn }) {
                     <View style={styles.wrapper}>
                         <Text style={styles.signInTitle}>Sign Up.</Text>
                         <Text style={styles.signInSubTitle}>Sign Up to start a new journey of recordings.</Text>
-                        <View style={styles.form_wrapper}>
 
+                        <View style={styles.form_wrapper}>
+                            <Text style={{ color: "red", fontSize: 15, marginBottom: 20 }}>{errorMSG}</Text>
                             <View style={styles.formCont}>
                                 <View style={styles.avater}>
                                     <Image source={email} style={styles.avaterImg} />
@@ -200,6 +209,7 @@ export default function SignUpScreen({ setSignIn }) {
                                 <View style={styles.email}>
                                     <TextInput style={styles.formInput}
                                         autoComplete="off"
+                                        keyboardType="visible-password"
                                         autoCapitalize="none"
                                         onChangeText={text => setEmailAddress(text)}
                                         value={emailAddress} placeholder={"Email Address"} />
@@ -375,7 +385,7 @@ const styles = StyleSheet.create({
 
     },
     form_wrapper: {
-        marginTop: 50
+        marginTop: 30
     },
 
     formCont: {

@@ -24,7 +24,7 @@ export default function App({ navigation }) {
       const user = await getUser();
       // console.log("The user", user);
       if (user !== null) {
-        // console.log("user",user.email)
+        console.log("user",user.email)
         setUserMail(user.email)
         setstatus("Signed In");
         if (user.email) {
