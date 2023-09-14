@@ -15,8 +15,7 @@ import recordFiles from "../assets/folder.png";
 import audioPlay from "../assets/recording2.png";
 import signOut from "../assets/door.png";
 
-import { storage, db, auth } from './fbConfig';
-import { collection, addDoc } from "firebase/firestore";
+import { storage } from './fbConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 
@@ -216,15 +215,10 @@ export default function HomeScreen({ navigation, route }) {
 
     //Sign out
     async function signOutF() {
-        // auth.signOut().then(() => {
-        //     navigation.navigate("SignOut");
-        // }).catch((error) => {
-        //     console.log(error.message);
-        // });
-        await AsyncStorage.removeItem('user').then(()=>{
+        await AsyncStorage.removeItem('user').then(() => {
             navigation.navigate("SignOut");
         })
-             
+
 
     }
 

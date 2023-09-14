@@ -12,60 +12,15 @@ import JournalsScreen from "./components/JournalsScreen";
 import SignInScreen from "./components/SignInScreen";
 import SignUpScreen from "./components/SignUpScreen";
 import SignOutScreen from "./components/SignOutScreen";
-// import DefaultScreen from "./DefaultScreen";
-
-// DefaultScreen
-
-import { auth } from './components/fbConfig';
-
-
 
 export default function App({ navigation }) {
   const Stack = createStackNavigator();
   const [isSignedIn, setSignIn] = useState(false);
   const [userMail, setUserMail] = useState("");
   const [status, setstatus] = useState("");
-  // let status = null;
+
   useEffect(() => {
-    // const checkAuth = (auth);
-    // console.log(auth);
-    // const unsubscribe = checkAuth.onAuthStateChanged((user) => {
-    //   if (user !== null) {
-    //     // console.log(user)
-    //     setUserMail(user.email)
-    //     setstatus("Signed In");
-    //     if (user.email) {
-    //       setSignIn(true);
-    //       // console.log("Hello");
-
-    //     }
-    //   } else {
-    //     setstatus("Not Signed In");
-    //     // console.log("Not Signed In");
-    //     setSignIn(false);
-    //   }
-    // });
-    // return () => unsubscribe();
-
-    //  const unsubscribe = getUser((user) => {
-    //   if (user !== null) {
-    //     console.log("user",user)
-    //     // setUserMail(user.email)
-    //     // setstatus("Signed In");
-    //     // if (user.email) {
-    //     //   setSignIn(true);
-    //     //   // console.log("Hello");
-
-    //     // }
-    //   } else {
-    //     setstatus("Not Signed In");
-    //     // console.log("Not Signed In");
-    //     setSignIn(false);
-    //   }
-    // });
-    // return () => unsubscribe();
-
-    (async () => {
+        (async () => {
       const user = await getUser();
       // console.log("The user", user);
       if (user !== null) {
@@ -74,8 +29,6 @@ export default function App({ navigation }) {
         setstatus("Signed In");
         if (user.email) {
           setSignIn(true);
-          // console.log("Hello");
-
         }
       } else {
         setstatus("Not Signed In");
@@ -122,7 +75,6 @@ export default function App({ navigation }) {
   }
 
   async function checkTokenExp(token, expiresIn) {
-    // const url = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBZP4kNQQ3P64kJDMZit_blizapfoBzLas`;
     const url = authUrl;
     const idToken = token;
     const response = await fetch(url, {

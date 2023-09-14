@@ -39,14 +39,6 @@ export default function SignUpScreen({ setSignIn }) {
     const [psChoiceGen, setPsChoiceGen] = useState(false);
 
     async function onSignUp() {
-        // console.log(emailAddress, password);
-        // createUserWithEmailAndPassword(auth, emailAddress, password).then(() => {
-        //     // console.log("sign up sccessfully");
-        //     // navigation.navigate("Journals");        
-        // }).catch((error) => {
-        //     console.log(error.message);
-        // })
-
         const user = await signUp(emailAddress, password);
         const res = await user;
         // console.log("My User", res);

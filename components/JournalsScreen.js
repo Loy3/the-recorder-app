@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 import { Audio } from "expo-av";
-// import { AudioRecorderPlayer, AudioPlayer } from 'react-native-audio-recorder-player';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getJournals, deleteMyJournal, updateMyJournal } from "../services/serviceStore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,7 +12,6 @@ import recordFiles from "../assets/folder.png";
 import audioPlay from "../assets/recording2.png";
 import signOut from "../assets/door.png";
 
-import recordOff from "../assets/recorderOff.png";
 
 import audMenu from "../assets/dots.png";
 import audEdit from "../assets/edit.png";
@@ -21,14 +19,11 @@ import audDelete from "../assets/delete.png";
 
 import closePopup from "../assets/close.png";
 
-import { storage, db, auth } from './fbConfig';
-import { collection, deleteDoc, doc, updateDoc, onSnapshot, query, where } from "firebase/firestore";
+import { storage } from './fbConfig';
 import { ref, deleteObject } from 'firebase/storage';
 
 export default function JournalsScreen({ navigation, route }) {
     const email = route.params.userMail;
-    // const { setSignIn } = route.params.setSignIn;
-
 
     const [journals, setJournals] = useState([]);
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -43,18 +38,6 @@ export default function JournalsScreen({ navigation, route }) {
     //Get data 
 
     const fetchData = (async () => {
-
-        // const collectionRef = collection(db, 'journals');
-        // const queryRef = query(collectionRef, where("email", '==', email));
-        // onSnapshot(queryRef, (snapshot) => {
-        //     const fetchedDocuments = [];
-        //     snapshot.forEach((doc) => {
-        //         fetchedDocuments.push({ id: doc.id, ...doc.data() });
-        //     });
-        //     setJournals(fetchedDocuments);
-
-        // });
-
 
         const journ = await getJournals(email);;
         const res = await journ;
@@ -75,7 +58,6 @@ export default function JournalsScreen({ navigation, route }) {
             journalsToDisplay.push(store);
         });
 
-        // console.log("res", journalsToDisplay);
         setJournals(journalsToDisplay)
     })
 
@@ -109,8 +91,6 @@ export default function JournalsScreen({ navigation, route }) {
     async function deleteJournal(event, data, index) {
         // console.log(data.audioName);
         try {
-            // let existingJournals = [...journals].filter(res => res.id !== data.id);
-            // console.log("existingJournals", existingJournals);
             deleteAudio(data.audioName).then(async () => {
                 await deleteMyJournal(data.id)
                 console.log("Document successfully deleted!");
@@ -151,21 +131,7 @@ export default function JournalsScreen({ navigation, route }) {
     async function journalToUpdate() {
         const docId = updateJournal.id
 
-
-
-        // const updateData = {
-        //     title: newJournalName,
-        //     audioName: updateJournal.audioName,
-        //     audioUrl: updateJournal.audioUrl,
-        //     date: updateJournal.date
-        // }
-
-        // const storageRef = doc(db, "journals", docId);
-
         try {
-            // await updateDoc(storageRef, updateData);
-            // console.log('Updated');
-
             let index = 0;
 
             for (let i = 0; i < journals.length; i++) {
@@ -176,7 +142,7 @@ export default function JournalsScreen({ navigation, route }) {
             let arr = journals;
             arr[index].title = newJournalName;
             // console.log(arr[index].title);
-            
+
             await updateMyJournal(docId, newJournalName).then(() => {
                 setMenuStatus(false);
                 setMenuTitle("Title");
@@ -228,13 +194,7 @@ export default function JournalsScreen({ navigation, route }) {
 
     //Sign out
     async function signOutF() {
-        // auth.signOut().then(() => {
-        //     navigation.navigate("SignOut");
-        // }).catch((error) => {
-        //     console.log(error.message);
-        // });
-
-        await AsyncStorage.removeItem('user').then(()=>{
+        await AsyncStorage.removeItem('user').then(() => {
             navigation.navigate("SignOut");
         })
 

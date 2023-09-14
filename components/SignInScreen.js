@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function SignInScreen({ setSignIn }) {
     const navigation = useNavigation();
-    
+
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
 
@@ -22,25 +22,7 @@ export default function SignInScreen({ setSignIn }) {
     const [warningMsg, setWarningMsg] = useState("")
     const [warningStatus, setWarningStatus] = useState(false)
 
-   async function onSignin() {
-        // console.log(emailAddress, password);
-
-        // if (emailAddress !== "" && password !== "") {
-
-        //     signInWithEmailAndPassword(auth, emailAddress, password).then(() => {
-        //         // navigation.navigate("Journals");
-        //         // console.log("signed");
-        //     }).catch((error) => {
-        //         console.log(error.message);
-        //         setWarningStatus(true);
-        //         setWarningMsg("Incorrect Email or Password");
-        //     })
-        // } else {
-        //     // alert
-        //     setWarningStatus(true);
-        //     setWarningMsg("Require both email address and password.");
-        // }3
-
+    async function onSignin() {
         const user = await signIn(emailAddress, password);
         const res = await user;
         // console.log("My User", res);
