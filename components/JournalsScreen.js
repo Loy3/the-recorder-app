@@ -226,7 +226,7 @@ export default function JournalsScreen({ navigation, route }) {
                                     </TouchableOpacity>
                                 }
                                 <View style={{ width: "100%" }}>
-                                    <Text style={styles.cardTitle}>Title: {jrn.title}</Text>
+                                    <Text style={styles.cardTitle}>{jrn.title}</Text>
                                     <Text style={styles.cardSubTitle}>{jrn.date}</Text>
                                 </View>
 
@@ -382,10 +382,8 @@ const styles = StyleSheet.create({
         height: 33
     },
 
-
-
     displayJournals: {
-        width: 350,
+        width: 355,
         marginTop: 100,
         // backgroundColor: "white"
     },

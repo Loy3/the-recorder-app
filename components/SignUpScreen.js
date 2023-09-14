@@ -44,18 +44,24 @@ export default function SignUpScreen({ setSignIn }) {
         const user = await signUp(emailAddress, password);
         const res = await user;
         console.log("My User", res);
-        let message = "";
-        if (!user.error) {
-            const jsonValue = JSON.stringify(res);
-            await AsyncStorage.setItem('user', jsonValue).then(() => {
-                console.log("Success");
-                setSignIn(true)
-                message = "";
-            })
-        } else {
-            message ="Invalid email, please try retyping it.";
-        }
-        seterrorMSG(message);
+        // let message = "";
+        // if (!user.error) {
+        //     const jsonValue = JSON.stringify(res);
+        //     await AsyncStorage.setItem('user', jsonValue).then(() => {
+        //         console.log("Success");
+        //         setSignIn(true)
+        //         message = "";
+        //     })
+        // } else {
+        //     message ="Invalid email, please try retyping it.";
+        // }
+        // seterrorMSG(message);
+        const jsonValue = JSON.stringify(res);
+        await AsyncStorage.setItem('user', jsonValue).then(() => {
+            console.log("Success");
+            setSignIn(true)
+            // message = "";
+        })
     }
 
     //Validation
