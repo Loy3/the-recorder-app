@@ -1,0 +1,47 @@
+const fetch = require('node-fetch');
+const fs = require('fs');
+
+async function firebaseUpload() {
+  const file2upload = '/Your/Path/To/your_pic.png';
+  const bucket = '<your-project-ID.appspot.com>';
+  const storagePath = 'cloud/path/to/your/pic.png'.replace('/', '%2F');
+  const token = '<your-firebase-token>';
+
+  const url2file = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${storagePath}`;
+  const headers = {
+    'Authorization': `Firebase ${token}`,
+    'X-Goog-Upload-Protocol': 'multipart'
+  };
+
+  const metadata = {
+    metadata: {
+      mykey: 'myvalue'
+    }
+  };
+
+  const files = [
+    { name: 'metadata', content: JSON.stringify(metadata), contentType: 'application/json' },
+    { name: 'file', content: fs.createReadStream(file2upload) }
+  ];
+
+  const formData = new FormData();
+  files.forEach(({ name, content, contentType }) => {
+    formData.append(name, content, {
+      filename: name,
+      contentType
+    });
+  });
+
+  const response = await fetch(url2file, {
+    method: 'POST',
+    headers,
+    body: formData
+  });
+
+  const jsonResponse = await response.json();
+  return jsonResponse;
+}
+
+firebaseUpload()
+  .then(response => console.log(response))
+  .catch(error => console.error(error));

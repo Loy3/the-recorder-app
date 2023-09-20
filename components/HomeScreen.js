@@ -174,7 +174,11 @@ export default function HomeScreen({ navigation, route }) {
                 const fileType = uriParts[uriParts.length - 1];
 
                 const audioTitle = recordingTitle;
+
                 const journal = `${recordings[0].title}${new Date().getTime()}.${fileType}`;
+
+                //pass journal as audio name
+                
                 const path = `audio/${journal}`;
 
                 const storageRef = ref(storage, path);
