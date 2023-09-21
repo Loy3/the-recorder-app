@@ -3,6 +3,7 @@ import { Audio } from "expo-av";
 import React, { useState, useRef, useEffect } from 'react';
 import { storeMyDoc } from "../services/serviceStore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storeAnAudio } from '../services/ServiceStorage';
 
 import recordOn from "../assets/recorder.png";
 import recordOff from "../assets/recorderOff.png";
@@ -45,7 +46,8 @@ export default function HomeScreen({ navigation, route }) {
     const email = route.params.userMail;
 
     useEffect(() => {
-        console.log(email);
+        // console.log(email);
+
     }, [])
     const [recording, setRecording] = useState();
     const [recordings, setRecordings] = useState([]);
@@ -177,34 +179,56 @@ export default function HomeScreen({ navigation, route }) {
 
                 const journal = `${recordings[0].title}${new Date().getTime()}.${fileType}`;
 
+
+                await storeAnAudio(journal, blob).then(async (url) => {
+                    // Save data to Firestore           
+                    const data = {
+                        title: audioTitle,
+                        audioName: journal,
+                        audioUrl: url,
+                        date: formattedDate,
+                        email: email
+                    }
+                    await storeMyDoc(data);
+                })
+                    .catch((error) => {
+                        console.error(error);
+                    }).then(async () => {
+                        setRecordings([]);
+                        setIsLoading(false);
+                        navigation.navigate("Journals");
+
+                    })
+
+
                 //pass journal as audio name
-                
-                const path = `audio/${journal}`;
 
-                const storageRef = ref(storage, path);
-                uploadBytes(storageRef, blob).then(() => {
-                    // Get download URL
-                    getDownloadURL(storageRef)
-                        .then(async (url) => {
-                            // Save data to Firestore           
-                            const data = {
-                                title: audioTitle,
-                                audioName: journal,
-                                audioUrl: url,
-                                date: formattedDate,
-                                email: email
-                            }
-                            await storeMyDoc(data);
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                        }).then(async () => {
-                            setRecordings([]);
-                            setIsLoading(false);
-                            navigation.navigate("Journals");
+                // const path = `audio/${journal}`;
 
-                        })
-                });
+                // const storageRef = ref(storage, path);
+                // uploadBytes(storageRef, blob).then(() => {
+                //     // Get download URL
+                //     getDownloadURL(storageRef)
+                //         .then(async (url) => {
+                //             // Save data to Firestore           
+                //             const data = {
+                //                 title: audioTitle,
+                //                 audioName: journal,
+                //                 audioUrl: url,
+                //                 date: formattedDate,
+                //                 email: email
+                //             }
+                //             await storeMyDoc(data);
+                //         })
+                //         .catch((error) => {
+                //             console.error(error);
+                //         }).then(async () => {
+                //             setRecordings([]);
+                //             setIsLoading(false);
+                //             navigation.navigate("Journals");
+
+                //         })
+                // });
             } else {
                 console.log("erroor with blob");
             }

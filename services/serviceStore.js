@@ -14,7 +14,7 @@ export const storeMyDoc = async (data) => {
         }
     }
 
-    console.log("Json", JSON.stringify(dataToUpdate));
+    // console.log("Json", JSON.stringify(dataToUpdate));
     const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/journals`;
     try {
         await fetch(url, {

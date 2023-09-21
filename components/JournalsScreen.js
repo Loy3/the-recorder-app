@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, ScrollView 
 import { Audio } from "expo-av";
 import React, { useState, useEffect } from 'react';
 import { getJournals, deleteMyJournal, updateMyJournal } from "../services/serviceStore";
+import { deleteMyAudio } from '../services/ServiceStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import stopAud from "../assets/stop2.png";
@@ -91,7 +92,9 @@ export default function JournalsScreen({ navigation, route }) {
     async function deleteJournal(event, data, index) {
         // console.log(data.audioName);
         try {
-            deleteAudio(data.audioName).then(async () => {
+            console.log(data.audioUrl);
+            const storageId = data.audioUrl;
+            deleteMyAudio(storageId).then(async () => {
                 await deleteMyJournal(data.id)
                 console.log("Document successfully deleted!");
                 let existingJournals = [...journals].filter(res => res.id !== data.id);
