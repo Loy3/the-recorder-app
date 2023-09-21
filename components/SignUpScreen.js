@@ -43,7 +43,21 @@ export default function SignUpScreen({ setSignIn }) {
     async function onSignUp() {
         const user = await signUp(emailAddress, password);
         const res = await user;
-        console.log("My User", res);
+        // console.log("My User", res);
+
+        if (res.error) {
+            console.log(res.error.message);
+            seterrorMSG("Email already exists")
+        } else {
+            console.log("all is well");
+            const jsonValue = JSON.stringify(res);
+            await AsyncStorage.setItem('user', jsonValue).then(() => {
+                console.log("Success");
+                setSignIn(true)
+                seterrorMSG("");
+            })
+        }
+
         // let message = "";
         // if (!user.error) {
         //     const jsonValue = JSON.stringify(res);
@@ -56,12 +70,9 @@ export default function SignUpScreen({ setSignIn }) {
         //     message ="Invalid email, please try retyping it.";
         // }
         // seterrorMSG(message);
-        const jsonValue = JSON.stringify(res);
-        await AsyncStorage.setItem('user', jsonValue).then(() => {
-            console.log("Success");
-            setSignIn(true)
-            // message = "";
-        })
+
+
+
     }
 
     //Validation

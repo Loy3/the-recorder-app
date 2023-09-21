@@ -41,6 +41,7 @@ export const signUp = async (email, password) => {
         });
         const data = await response.json();
         // console.log("Done: ", data);
+
         return data;
     } catch (error) {
         console.log(error);

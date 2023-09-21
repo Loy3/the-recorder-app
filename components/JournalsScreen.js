@@ -111,15 +111,15 @@ export default function JournalsScreen({ navigation, route }) {
         }
     }
 
-    async function deleteAudio(audio) {
-        const path = `audio/${audio}`;
-        const fileRef = ref(storage, path);
-        // Delete the file
-        deleteObject(fileRef).then(() => {
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
+    // async function deleteAudio(audio) {
+    //     const path = `audio/${audio}`;
+    //     const fileRef = ref(storage, path);
+    //     // Delete the file
+    //     deleteObject(fileRef).then(() => {
+    //     }).catch((error) => {
+    //         console.log(error);
+    //     });
+    // }
 
     //update
     const [updateJournal, setUpdateJournal] = useState([]);

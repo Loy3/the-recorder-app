@@ -21,17 +21,26 @@ export default function SignInScreen({ setSignIn }) {
     const [passwordVis, setPasswordVis] = useState(true);
     const [warningMsg, setWarningMsg] = useState("")
     const [warningStatus, setWarningStatus] = useState(false)
+    const [errorMSG, seterrorMSG] = useState("");
 
     async function onSignin() {
         const user = await signIn(emailAddress, password);
         const res = await user;
         // console.log("My User", res);
 
-        const jsonValue = JSON.stringify(res);
-        await AsyncStorage.setItem('user', jsonValue).then(() => {
-            console.log("Success");
-            setSignIn(true)
-        })
+        if (res.error) {
+            console.log(res.error.message);
+            seterrorMSG("Email or Password is invalid")
+        } else {
+            // console.log("all is well");
+            const jsonValue = JSON.stringify(res);
+            await AsyncStorage.setItem('user', jsonValue).then(() => {
+                console.log("Success");
+                setSignIn(true)
+            })
+        }
+
+
     }
 
     function handlePassword() {
