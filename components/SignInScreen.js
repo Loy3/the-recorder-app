@@ -64,6 +64,7 @@ export default function SignInScreen({ setSignIn }) {
                     <View style={styles.wrapper}>
                         <Text style={styles.signInTitle}>Sign In.</Text>
                         <Text style={styles.signInSubTitle}>Sign in to start recording.</Text>
+                        <Text style={{ color: "red", fontSize: 15, marginTop: 20 }}>{errorMSG}</Text>
                         <View style={styles.form_wrapper}>
 
                             {warningStatus ?
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
 
     },
     form_wrapper: {
-        marginTop: 50
+        marginTop: 30
     },
 
     formCont: {
